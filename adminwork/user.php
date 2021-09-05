@@ -119,16 +119,22 @@ if (isset($_GET['id'])) {
 
 
 if (isset($_POST['login-btn'])) {
+    function validateLogin(){
     $errors = validateLogin($_POST);
-
+    }
     if (count($errors) === 0) {
+        function selectOne(){ //error
+            
+$table = 'users';  
+} 
         $user = selectOne($table, ['username' => $_POST['username']]);
-
-        if ($user && password_verify($_POST['password'], $user['password'])) {
+        
+                if ($user && password_verify($_POST['password'], $user['password'])) {
             loginUser($user);
         } else {
            array_push($errors, 'Wrong credentials');
         }
+    
     }
 
     $username = $_POST['username'];
