@@ -15,7 +15,10 @@ set_include_path(get_include_path().":"."/../validations/validateUser.php");
 
 $table = 'users';
 
+function selectAll(){ //error
+    $table = 'users';
 $admin_users = selectAll($table);
+}
 
 $errors = array();
 $id = '';
@@ -43,9 +46,9 @@ function loginUser($user)
 }
 
 if (isset($_POST['register-btn']) || isset($_POST['create-admin'])) {
-    
+    function validateUser(){ //error
     $errors = validateUser($_POST);
-
+    }
     if (count($errors) === 0) {
         unset($_POST['register-btn'], $_POST['passwordConf'], $_POST['create-admin']);
         $_POST['password'] = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -59,8 +62,15 @@ if (isset($_POST['register-btn']) || isset($_POST['create-admin'])) {
             exit();
         } else {
             $_POST['admin'] = 0;
+            function create(){  //error
+                $table = 'users';
             $user_id = create($table, $_POST);
+            }
+            function selectOne(){ //error
+                $table = 'users';
+                $user_id = "";
             $user = selectOne($table, ['id' => $user_id]);
+            }
             loginUser($user);
         }
     } else {
