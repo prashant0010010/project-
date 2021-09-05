@@ -9,7 +9,7 @@ if (isset($_GET['t_id'])) {
   $postsTitle = "You searched for '" . $_POST['search-term'] . "'";
   $posts = searchPosts($_POST['search-term']);
 } else {
-  $posts = getPublishedPosts();
+  //$posts = getPublishedPosts();
 }
 
 
