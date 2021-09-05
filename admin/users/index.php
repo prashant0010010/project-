@@ -81,6 +81,7 @@
                             <th colspan="2">Action</th>
                         </thead>
                         <tbody>
+                        <?php $admin_users=""; if (is_array($admin_users) || is_object($admin_users)): ?>
                             <?php foreach ($admin_users as $key => $user): ?>
                                 <tr>
                                     <td><?php echo $key + 1; ?></td>
@@ -90,6 +91,7 @@
                                     <td><a href="index.php?delete_id=<?php echo $user['id']; ?>" class="delete">delete</a></td>
                                 </tr>
                             <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
