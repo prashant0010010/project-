@@ -21,7 +21,10 @@ $id = '';
 $name = '';
 $description = '';
 
+function selectAll($table, $conditions = [])   //new update error
+{
 $topics = selectAll($table);
+}
 
 if (isset($_POST['add-topic'])) {
     adminOnly();
