@@ -85,6 +85,7 @@
                             <th colspan="3">Action</th>
                         </thead>
                         <tbody>
+                        <?php $posts=""; if (is_array($posts) || is_object($posts)): ?>
                         <?php foreach ($posts as $key => $post): ?>
                                                              <tr>
                                     <td><?php echo $key + 1; ?></td>
@@ -102,6 +103,7 @@
                                 </tr>
                            
                                 <?php endforeach; ?>
+                                <?php endif; ?>
 
                         </tbody>
                     </table>
