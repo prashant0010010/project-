@@ -75,7 +75,7 @@
                 <div class="content">
 
                     <h2 class="page-title">Manage Topics</h2>
-
+                    <?php require "../../validations/messages.php"; ?>
                     <table>
                         <thead>
                             <th>SN</th>
@@ -83,6 +83,7 @@
                             <th colspan="2">Action</th>
                         </thead>
                         <tbody>
+                            <?php $topics=""; if (is_array($topics) || is_object($topics)): ?>
                             <?php foreach ($topics as $key => $topic): ?>
                                <tr>
                                     <td><?php echo $key + 1; ?></td>
@@ -91,6 +92,7 @@
                                     <td><a href="index.php?del_id=<?php echo $topic['id']; ?>" class="delete">delete</a></td>
                                 </tr> 
                             <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
 
