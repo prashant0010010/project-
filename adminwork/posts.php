@@ -1,54 +1,18 @@
 <?php
 
+set_include_path(get_include_path().":"."/../databse/db.php");
+//admin validation
 
-//post validation
+set_include_path(get_include_path().":"."/../validations/adminvalidate.php");
 
-
-function validatePost($post)
-{
-    $errors = array();
-
-    if (empty($post['title'])) {
-        array_push($errors, 'Title is required');
-    }
-
-    if (empty($post['body'])) {
-        array_push($errors, 'Body is required');
-    }
-
-    if (empty($post['topic_id'])) {
-        array_push($errors, 'Please select a topic');
-    }
-
-    $existingPost = selectOne('posts', ['title' => $post['title']]);
-    if ($existingPost) {
-        if (isset($post['update-post']) && $existingPost['id'] != $post['id']) {
-            array_push($errors, 'Post with that title already exists');
-        }
-
-        if (isset($post['add-post'])) {
-            array_push($errors, 'Post with that title already exists');
-        }
-    }
-
-    return $errors;
-}
+//admin validation
+set_include_path(get_include_path().":"."/../validations/postValidation.php");
 
 
-$table = '$posts';
+$table = 'posts';
 
-//$topics = selectAll($table);
-
-$servername = 'localhost';
-$username = 'root';
-$password = '';
-$db_name = 'blogsite';
-
-$conn = new MySQLi($servername, $username, $password, $db_name);
-
-if ($conn->connect_error) {
-    die('Database connection error: ' . $conn->connect_error);
-}
+$topics = selectAll('topics');
+$posts = selectAll($table);
 
 $errors = array();
 $id = "";
@@ -56,12 +20,11 @@ $title = "";
 $body = "";
 $topic_id = "";
 $published = "";
-$post ="";
 
 
 if (isset($_GET['id'])) {
     $post = selectOne($table, ['id' => $_GET['id']]);
-    selectOne($table, $id);
+    //selectOne($table, $id);
     $id = $post['id'];
     $title = $post['title'];
     $body = $post['body'];
@@ -88,37 +51,6 @@ if (isset($_GET['published']) && isset($_GET['p_id'])) {
     header("location: ./admin/posts/index.php"); 
     exit();
 }
-
-
-function selectAll($table, $conditions = [])
-{
-    global $conn;
-    $sql = "SELECT * FROM $table";
-    if (empty($conditions)) {
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $records = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        return $records;
-    } else {
-        $i = 0;
-        foreach ($conditions as $key => $value) {
-            if ($i === 0) {
-                $sql = $sql . " WHERE $key=?";
-            } else {
-                $sql = $sql . " AND $key=?";
-            }
-            $i++;
-        }
-        
-        $stmt = executeQuery($sql, $conditions);
-        $records = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        return $records;
-    }
-}
-
-$posts = selectAll('posts');
-
-
 
 
 if (isset($_POST['add-post'])) {
@@ -159,6 +91,7 @@ if (isset($_POST['add-post'])) {
 }
 
 
+
 if (isset($_POST['update-post'])) {
     adminOnly();
     $errors = validatePost($_POST);
@@ -197,38 +130,6 @@ if (isset($_POST['update-post'])) {
     }
 
 }
-
-
-
-//adminvalidate
-
-
-function usersOnly($redirect = '/index.php')
-{
-    if (empty($_SESSION['id'])) {
-        $_SESSION['message'] = 'You need to login first';
-        $_SESSION['type'] = 'error';
-        header("location:  ./$redirect");
-        exit(0);
-    }
-}
-
-function adminOnly($redirect = '/index.php')
-{
-    if (empty($_SESSION['id']) || empty($_SESSION['admin'])) {
-        $_SESSION['message'] = 'You are not authorized';
-        $_SESSION['type'] = 'error';
-        header("location:  ./$redirect");
-        exit(0);
-    }
-}
-
-function guestsOnly($redirect = '/index.php')
-{
-    if (isset($_SESSION['id'])) {
-        header("location:  ./$redirect");
-        exit(0);
-    }    
-}
+ 
 
 ?>
